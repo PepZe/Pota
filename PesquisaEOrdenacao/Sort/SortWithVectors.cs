@@ -1,0 +1,157 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text;
+
+namespace PesquisaEOrdenacao.Sort
+{
+    public static class SortWithVectors
+    {
+
+        public static int[] BubbleSort(this int[] list)
+        {
+            bool invertido;
+            do
+            {
+                invertido = false;
+                for (int i = 1; i < list.Length; i++)
+                {
+                    if (list[i - 1] > list[i])
+                    {
+                        var aux = list[i - 1];
+                        list[i - 1] = list[i];
+                        list[i] = aux;
+
+                        invertido = true;
+                    }
+                }
+
+            } while (invertido);
+            return list;
+        }
+        public static int[] InsertionSort(this int[] list)
+        {
+            for (int i = 1; i < list.Length; i++)
+            {
+                int j = i;
+                while (j > 0 && list[j - 1] > list[j])
+                {
+                    var aux = list[j];
+                    list[j] = list[j - 1];
+                    list[j - 1] = aux;
+                    j--;
+                }
+            }
+            return list;
+        }
+
+        public static int[] MergeSort(int[] vet, int indiceInicial, int indiceFinal)
+        {
+            if (indiceInicial < indiceFinal)
+            {
+                int meioDoVetor = (indiceInicial + indiceFinal) / 2;
+                MergeSort(vet, indiceInicial, meioDoVetor);
+                MergeSort(vet, meioDoVetor + 1, indiceFinal);
+                Intercala(vet, indiceInicial, meioDoVetor, indiceFinal);
+            }
+            return vet;
+        }
+        private static void Intercala(int[] vet, int indiceInicial, int meioDoVetor, int indiceFinal)
+        {
+            int[] novoVetor = new int[vet.Length];
+
+            int i, j;
+            for (i = indiceInicial; i <= meioDoVetor; i++)
+            {
+                novoVetor[i] = vet[i];
+            }
+            for (j = meioDoVetor + 1; j <= indiceFinal; j++)
+            {
+                novoVetor[indiceFinal + meioDoVetor + 1 - j] = vet[j];
+            }
+            i = indiceInicial;
+            j = indiceFinal;
+
+            for (int k = indiceInicial; k <= indiceFinal; k++)
+            {
+                if (novoVetor[i] <= novoVetor[j])
+                {
+                    vet[k] = novoVetor[i];
+                    i++;
+                }
+                else
+                {
+                    vet[k] = novoVetor[j];
+                    j--;
+                }
+            }
+        }
+
+
+        public static int[] SelectionSort(int[] list)
+        {
+            for (int i = 0; i < list.Length - 1; i++)
+            {
+                var minimo = i;
+                for (int j = i + 1; j < list.Length; j++)
+                {
+                    if (list[j] < list[minimo])
+                    {
+                        minimo = j;
+                    }
+                }
+                var temp = list[i];
+                list[i] = list[minimo];
+                list[minimo] = temp;
+            }
+            return list;
+        }
+
+        public static int[] QuickSort(int[] vet, int inicio, int fim)
+        {
+            if (inicio < fim)
+            {
+                var meio = Particionar(vet, inicio, fim);
+                QuickSort(vet, inicio, meio - 1);
+                QuickSort(vet, meio + 1, fim);
+            }
+            return vet;
+        }
+
+        private static int Particionar(int[] vet, int inicio, int fim)
+        {
+            var i = inicio + 1;
+            var j = fim;
+            int aux;
+
+            while (i <= j)
+            {
+                if (vet[i] < vet[inicio])
+                {
+                    i++;
+                }
+                else
+                {
+                    if (vet[j] > vet[inicio])
+                    {
+                        j--;
+                    }
+                    else
+                    {
+                        aux = vet[i];
+                        vet[i] = vet[j];
+                        vet[j] = aux;
+                        i++;
+                        j--;
+                    }
+                }
+            }
+
+            aux = vet[inicio];
+            vet[inicio] = vet[j];
+            vet[j] = aux;
+            return j;
+        }
+    }
+}
+
