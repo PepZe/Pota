@@ -1,5 +1,6 @@
 ﻿using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using PesquisaEOrdenacao.Enum;
 using PesquisaEOrdenacao.Model;
 using PesquisaEOrdenacao.StyleSheet;
 using System;
@@ -39,35 +40,36 @@ namespace PesquisaEOrdenacao.Manipulator
         /// <param name="columnsSettings">Columns settings.</param>
         /// <param name="excelFirstColumn">First column of the excel.</param>
         /// <returns>Successful file creation.</returns>
-        //public bool GenerateReport(List<ReportBcModel> reports, string path,
-        //    HeaderColumnSettings[] columnsSettings, ExcelRange[] excelFirstColumn)
-        //{
-        //    path += ".xlsx";
-        //    bool successful = true;
-        //    try
-        //    {
-        //        using (var package = new ExcelPackage(new FileInfo(path)))
-        //        {
-        //            var sheet = AddWorksheet(package, "Report");
-        //            SetExcelRange(sheet, excelFirstColumn);
-        //            SetStyles(columnsSettings, excelFirstColumn);
+        public bool GenerateReport(List<ReportSortModel> reports, string path,
+            HeaderColumnSettings[] columnsSettings, ExcelRange[] excelFirstColumn)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.Commercial;
+            path += ".xlsx";
+            bool successful = true;
+            try
+            {
+                using (var package = new ExcelPackage(new FileInfo(path)))
+                {
+                    var sheet = AddWorksheet(package, "Report");
+                    SetExcelRange(sheet, excelFirstColumn);
+                    SetStyles(columnsSettings, excelFirstColumn);
 
-        //            var startRow = 2;
-        //            foreach (var report in reports)
-        //            {
-        //                startRow = BcFillsTableRow(columnsSettings, sheet, startRow, report);
-        //            }
+                    var startRow = 2;
+                    foreach (var report in reports)
+                    {
+                        startRow = BcFillsTableRow(columnsSettings, sheet, startRow, report);
+                    }
 
-        //            SetColumnStyles(sheet, columnsSettings);
-        //            package.SaveAs(new FileInfo(path));
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        successful = false;
-        //    }
-        //    return successful;
-        //}
+                    SetColumnStyles(sheet, columnsSettings);
+                    package.SaveAs(new FileInfo(path));
+                }
+            }
+            catch (Exception ex)
+            {
+                successful = false;
+            }
+            return successful;
+        }
 
         /// <summary>
         /// Fill the row with the bc informations.
@@ -75,36 +77,27 @@ namespace PesquisaEOrdenacao.Manipulator
         /// <param name="columnsSettings">Columns settings.</param>
         /// <param name="sheet">The current sheet.</param>
         /// <param name="row">Row to be filled.</param>
-        /// <param name="bcModel">The bc informations.</param>
+        /// <param name="sortModel">The bc informations.</param>
         /// <returns>The next row to be filled.</returns>
-        //private int BcFillsTableRow(HeaderColumnSettings[] columnsSettings, ExcelWorksheet sheet, int row, ReportBcModel bcModel)
-        //{
-        //    _xlsxStyles.SetBorderStyle(sheet.Cells
-        //                    [row, columnsSettings.First().ColumnNumber,
-        //                    row, columnsSettings.Last().ColumnNumber]
-        //                    .Style.Border, ExcelBorderStyle.Thin);
+        private int BcFillsTableRow(HeaderColumnSettings[] columnsSettings, ExcelWorksheet sheet, int row, ReportSortModel sortModel)
+        {
+            _xlsxStyles.SetBorderStyle(sheet.Cells
+                            [row, columnsSettings.First().ColumnNumber,
+                            row, columnsSettings.Last().ColumnNumber]
+                            .Style.Border, ExcelBorderStyle.Thin);
 
-        //    _xlsxStyles.SetColorBackground(sheet.Cells[row, columnsSettings.First().ColumnNumber,
-        //        row, columnsSettings.Last().ColumnNumber].Style.Fill, Color.LightGray);
+            _xlsxStyles.SetColorBackground(sheet.Cells[row, columnsSettings.First().ColumnNumber,
+                row, columnsSettings.Last().ColumnNumber].Style.Fill, Color.LightGray);
 
-        //    var method = GetHeaderColumnSettingsByKey(columnsSettings, ReportBcSettings.Method);
-        //    sheet.Cells[row, method.First().ColumnNumber].Value = bcModel.BcModel.Method;
+            var method = GetHeaderColumnSettingsByKey(columnsSettings, ReportSortSettings.Name);
+            sheet.Cells[row, method.First().ColumnNumber].Value = sortModel.Sort;
 
-        //    var timeStart = GetHeaderColumnSettingsByKey(columnsSettings, ReportBcSettings.StartTime);
-        //    sheet.Cells[row, timeStart.First().ColumnNumber].Value = bcModel.StartDate.ToString(DateFilter.DATE_PRINTER_FORMAT);
+            var statusReturn = GetHeaderColumnSettingsByKey(columnsSettings, ReportSortSettings.Time);
+            sheet.Cells[row, statusReturn.First().ColumnNumber].Value = sortModel.Time;
 
-        //    var timeSpent = GetHeaderColumnSettingsByKey(columnsSettings, ReportBcSettings.TimeSpent);
-        //    sheet.Cells[row, timeSpent.First().ColumnNumber].Value = bcModel.TimeSpan.ToString();
-
-        //    var parameters = GetHeaderColumnSettingsByKey(columnsSettings, ReportBcSettings.Parameters);
-        //    sheet.Cells[row, parameters.First().ColumnNumber].Value = bcModel.BcModel.Parameters;
-
-        //    var statusReturn = GetHeaderColumnSettingsByKey(columnsSettings, ReportBcSettings.Status);
-        //    sheet.Cells[row, statusReturn.First().ColumnNumber].Value = bcModel.BcModel.Status;
-
-        //    row++;
-        //    return row;
-        //}
+            row++;
+            return row;
+        }
 
         /// <summary>
         /// Get header column by key.
@@ -112,10 +105,10 @@ namespace PesquisaEOrdenacao.Manipulator
         /// <param name="columnSettings">The header to consult.</param>
         /// <param name="reportBcSetting">Selection key.</param>
         /// <returns>The selected header.</returns>
-        //private HeaderColumnSettings[] GetHeaderColumnSettingsByKey(HeaderColumnSettings[] columnSettings, ReportBcSettings reportBcSetting)
-        //{
-        //    return columnSettings.Where(column => column.ColumnValue == reportBcSetting.ToString()).ToArray();
-        //}
+        private HeaderColumnSettings[] GetHeaderColumnSettingsByKey(HeaderColumnSettings[] columnSettings, ReportSortSettings reportBcSetting)
+        {
+            return columnSettings.Where(column => column.ColumnValue == reportBcSetting.ToString()).ToArray();
+        }
 
         /// <summary>
         /// Add worksheet.

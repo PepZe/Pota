@@ -11,7 +11,7 @@ namespace PesquisaEOrdenacao.Lists
         private Celula _last;
         private int _totalElements = 0;
 
-        public void AdicionaNoComeco(int element)
+        public void AddBeginning(int element)
         {
             var newElement = new Celula(element);
 
@@ -29,11 +29,11 @@ namespace PesquisaEOrdenacao.Lists
             _totalElements++;
         }
 
-        public void Adicionar(int elemento)
+        public void Add(int elemento)
         {
             if (_totalElements == 0)
             {
-                AdicionaNoComeco(elemento);
+                AddBeginning(elemento);
             }
             else
             {
@@ -46,15 +46,15 @@ namespace PesquisaEOrdenacao.Lists
         }
 
 
-        public void Adicionar(int index, int element)
+        public void Add(int index, int element)
         {
             if (index == 0)
             {
-                AdicionaNoComeco(element);
+                AddBeginning(element);
             }
             else if (index == _totalElements)
             {
-                Adicionar(element);
+                Add(element);
             }
             else
             {
@@ -88,7 +88,7 @@ namespace PesquisaEOrdenacao.Lists
             return atual;
         }
 
-        public object Get(int index)
+        public int Get(int index)
         {
             return GetElement(index).Element;
         }

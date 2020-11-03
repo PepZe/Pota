@@ -152,6 +152,66 @@ namespace PesquisaEOrdenacao.Sort
             vet[j] = aux;
             return j;
         }
+
+        public static int[] HeapSort(int[] vet, int tamanho)
+        {
+            CriaHeap(vet, tamanho);
+            var fim = tamanho - 1;
+            while (fim > 0)
+            {
+                Troca(vet, 0, fim);
+                fim -= 1;
+                ArrumaHeap(vet, 0, fim);
+            }
+            return vet;
+        }
+
+        private static void ArrumaHeap(int[] vet, int inicio, int fim)
+        {
+            var raiz = inicio;
+            while (raiz * 2 + 1 <= fim)
+            {
+                var filho = raiz * 2 + 1;
+                var trocar = raiz;
+                if (vet[trocar] < vet[filho])
+                {
+                    trocar = filho;
+                }
+
+                if (filho + 1 <= fim && vet[trocar] < vet[filho + 1])
+                {
+                    trocar = filho + 1;
+                }
+
+                if (trocar == raiz)
+                {
+
+                    break;
+                }
+                else
+                {
+                    Troca(vet, raiz, trocar);
+                    raiz = trocar;
+                }
+            }
+        }
+
+        private static void Troca(int[] vet, int i, int j)
+        {
+            var temp = vet[j];
+            vet[j] = vet[i];
+            vet[i] = temp;
+        }
+
+        private static void CriaHeap(int[] vet, int tamanho)
+        {
+            var inicio = (tamanho - 2) / 2;
+            while (inicio >= 0)
+            {
+                ArrumaHeap(vet, inicio, tamanho - 1);
+                inicio -= 1;
+            }
+        }
     }
 }
 
