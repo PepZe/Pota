@@ -13,7 +13,7 @@ namespace PesquisaEOrdenacao.Sort
             bool invertido;
             do
             {
-                var element = list.GetElement(1);
+                var element = list.First.Next;
 
                 invertido = false;
                 for (int i = 1; i < list.Length(); i++)
@@ -35,7 +35,7 @@ namespace PesquisaEOrdenacao.Sort
 
         public static DoublyLinkedList InsertionSort(this DoublyLinkedList list)
         {
-            var auxElement = list.GetElement(0);
+            var auxElement = list.First;
 
             for (int i = 0; i < list.Length(); i++)
             {
@@ -57,7 +57,7 @@ namespace PesquisaEOrdenacao.Sort
 
         public static LinkedList SelectionSort(LinkedList list)
         {
-            for (Celula i = list.GetElement(0); i != null; i = i.Next)
+            for (Celula i = list.First; i != null; i = i.Next)
             {
                 var minimo = i;
                 for (Celula j = i.Next; j != null; j = j.Next)
@@ -73,5 +73,6 @@ namespace PesquisaEOrdenacao.Sort
             }
             return list;
         }
+
     }
 }

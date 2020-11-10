@@ -57,7 +57,7 @@ namespace PesquisaEOrdenacao.Manipulator
                     var startRow = 2;
                     foreach (var report in reports)
                     {
-                        startRow = BcFillsTableRow(columnsSettings, sheet, startRow, report);
+                        startRow = SortFillsTableRow(columnsSettings, sheet, startRow, report);
                     }
 
                     SetColumnStyles(sheet, columnsSettings);
@@ -79,7 +79,7 @@ namespace PesquisaEOrdenacao.Manipulator
         /// <param name="row">Row to be filled.</param>
         /// <param name="sortModel">The bc informations.</param>
         /// <returns>The next row to be filled.</returns>
-        private int BcFillsTableRow(HeaderColumnSettings[] columnsSettings, ExcelWorksheet sheet, int row, ReportSortModel sortModel)
+        private int SortFillsTableRow(HeaderColumnSettings[] columnsSettings, ExcelWorksheet sheet, int row, ReportSortModel sortModel)
         {
             _xlsxStyles.SetBorderStyle(sheet.Cells
                             [row, columnsSettings.First().ColumnNumber,
@@ -92,8 +92,14 @@ namespace PesquisaEOrdenacao.Manipulator
             var method = GetHeaderColumnSettingsByKey(columnsSettings, ReportSortSettings.Name);
             sheet.Cells[row, method.First().ColumnNumber].Value = sortModel.Sort;
 
-            var statusReturn = GetHeaderColumnSettingsByKey(columnsSettings, ReportSortSettings.Time);
-            sheet.Cells[row, statusReturn.First().ColumnNumber].Value = sortModel.Time;
+            var time = GetHeaderColumnSettingsByKey(columnsSettings, ReportSortSettings.Time);
+            sheet.Cells[row, time.First().ColumnNumber].Value = sortModel.Time;
+
+            var ordenationType = GetHeaderColumnSettingsByKey(columnsSettings, ReportSortSettings.SortType);
+            sheet.Cells[row, ordenationType.First().ColumnNumber].Value = sortModel.ordenation;
+
+            var length = GetHeaderColumnSettingsByKey(columnsSettings, ReportSortSettings.Length);
+            sheet.Cells[row, length.First().ColumnNumber].Value = sortModel.Length;
 
             row++;
             return row;
@@ -103,11 +109,11 @@ namespace PesquisaEOrdenacao.Manipulator
         /// Get header column by key.
         /// </summary>
         /// <param name="columnSettings">The header to consult.</param>
-        /// <param name="reportBcSetting">Selection key.</param>
+        /// <param name="reportSortSetting">Selection key.</param>
         /// <returns>The selected header.</returns>
-        private HeaderColumnSettings[] GetHeaderColumnSettingsByKey(HeaderColumnSettings[] columnSettings, ReportSortSettings reportBcSetting)
+        private HeaderColumnSettings[] GetHeaderColumnSettingsByKey(HeaderColumnSettings[] columnSettings, ReportSortSettings reportSortSetting)
         {
-            return columnSettings.Where(column => column.ColumnValue == reportBcSetting.ToString()).ToArray();
+            return columnSettings.Where(column => column.ColumnValue == reportSortSetting.ToString()).ToArray();
         }
 
         /// <summary>

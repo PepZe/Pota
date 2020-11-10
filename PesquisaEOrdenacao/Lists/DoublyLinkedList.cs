@@ -7,8 +7,8 @@ namespace PesquisaEOrdenacao.Lists
 {
     public class DoublyLinkedList
     {
-        private Celula _first = null;
-        private Celula _last;
+        public Celula First = null;
+        public Celula Last;
         private int _totalElements = 0;
 
         public void AddBeginning(int element)
@@ -17,13 +17,13 @@ namespace PesquisaEOrdenacao.Lists
 
             if (_totalElements == 0)
             {
-                _first = newElement;
-                _last = newElement;
+                First = newElement;
+                Last = newElement;
             }
             else
             {
-                _first.Previous = newElement;
-                _first = newElement;
+                First.Previous = newElement;
+                First = newElement;
             }
 
             _totalElements++;
@@ -38,9 +38,9 @@ namespace PesquisaEOrdenacao.Lists
             else
             {
                 var newElement = new Celula(elemento, null);
-                _last.Next = newElement;
-                newElement.Previous = _last;
-                _last = newElement;
+                Last.Next = newElement;
+                newElement.Previous = Last;
+                Last = newElement;
                 _totalElements++;
             }
         }
@@ -80,7 +80,7 @@ namespace PesquisaEOrdenacao.Lists
             {
                 throw new ArgumentException("element was not found");
             }
-            var atual = _first;
+            var atual = First;
             for (int i = 0; i < index; i++)
             {
                 atual = atual.Next;
@@ -99,12 +99,12 @@ namespace PesquisaEOrdenacao.Lists
             {
                 throw new ArgumentException("Empty list");
             }
-            _first = _first.Next;
+            First = First.Next;
             _totalElements--;
 
             if (_totalElements == 0)
             {
-                _last = null;
+                Last = null;
             }
         }
 
@@ -116,9 +116,9 @@ namespace PesquisaEOrdenacao.Lists
             }
             else
             {
-                var penult = _last.Previous;
+                var penult = Last.Previous;
                 penult.Next = null;
-                _last = penult;
+                Last = penult;
                 _totalElements--;
             }
         }
@@ -152,7 +152,7 @@ namespace PesquisaEOrdenacao.Lists
 
         public bool Contains(int element)
         {
-            var current = _first;
+            var current = First;
 
             while (current != null)
             {
@@ -174,7 +174,7 @@ namespace PesquisaEOrdenacao.Lists
             {
                 return "";
             }
-            var atual = _first;
+            var atual = First;
 
             string result = "" + atual.Element;
             atual = atual.Next;

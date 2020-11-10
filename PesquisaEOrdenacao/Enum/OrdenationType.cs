@@ -4,11 +4,9 @@ using System.Text;
 
 namespace PesquisaEOrdenacao.Enum
 {
-    public enum ReportSortSettings
+    public enum OrdenationType
     {
-        Name,
-        Time,
-        SortType,
-        Length
+        Vector, 
+        List
     }
 }

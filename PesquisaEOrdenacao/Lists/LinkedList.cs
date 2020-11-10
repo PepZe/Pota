@@ -8,18 +8,18 @@ namespace PesquisaEOrdenacao.Lists
 {
     public class LinkedList
     {
-        private Celula first = null;
-        private Celula _ultimo;
+        public Celula First = null;
+        public Celula Last;
         private int _totalElements = 0;
 
         public void AddBeginning(int elemento)
         {
-            var nova = new Celula(elemento, first);
-            first = nova;
+            var nova = new Celula(elemento, First);
+            First = nova;
 
             if (_totalElements == 0)
             {
-                _ultimo = first;
+                Last = First;
             }
 
             _totalElements++;
@@ -34,8 +34,8 @@ namespace PesquisaEOrdenacao.Lists
             else
             {
                 var nova = new Celula(elemento, null);
-                _ultimo.Next = nova;
-                _ultimo = nova;
+                Last.Next = nova;
+                Last = nova;
                 _totalElements++;
             }
         }
@@ -68,7 +68,7 @@ namespace PesquisaEOrdenacao.Lists
             {
                 throw new ArgumentException("element was not found");
             }
-            var atual = first;
+            var atual = First;
             for (int i = 0; i < index; i++)
             {
                 atual = atual.Next;
@@ -87,12 +87,12 @@ namespace PesquisaEOrdenacao.Lists
             {
                 throw new ArgumentException("Empty list");
             }
-            first = first.Next;
+            First = First.Next;
             _totalElements--;
 
             if (_totalElements == 0)
             {
-                _ultimo = null;
+                Last = null;
             }
         }
 
@@ -104,7 +104,7 @@ namespace PesquisaEOrdenacao.Lists
             {
                 return "";
             }
-            var current = first;
+            var current = First;
 
             string result = "" + current.Element;
             current = current.Next;
